@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✦ Solara SMP — Официальный сайт</title>
+    <style>
+        :root {
+            --bg-color: #0b0914;
+            --card-bg: #141125;
+            --card-border: #262040;
+            --accent-purple: #a855f7;
+            --accent-pink: #ec4899;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Шапка */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: rgba(11, 9, 20, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-pink);
+        }
+
+        /* Главный баннер (Hero) */
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+            background: radial-gradient(circle at center, #1e1338 0%, var(--bg-color) 70%);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+        }
+
+        .btn-main {
+            display: inline-block;
+            padding: 14px 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(236, 72, 153, 0.6);
+        }
+
+        /* Основной контент */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--accent-purple);
+            padding-left: 15px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 25px;
+            transition: border-color 0.3s;
+        }
+
+        .card:hover {
+            border-color: var(--accent-purple);
+        }
+
+        .card h3 {
+            color: var(--accent-pink);
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: rgba(168, 85, 247, 0.15);
+            color: var(--accent-purple);
+            border: 1px solid var(--accent-purple);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 15px;
+        }
+
+        /* Футер */
+        footer {
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid var(--card-border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">✦ SOLARA</div>
+        <nav>
+            <a href="#about">О сервере</a>
+            <a href="#history">История</a>
+            <a href="#join">Как попасть</a>
+            <a href="#tech">Сборка</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>SOLARA PROJECT</h1>
+        <p>Изолированный остров, Мертвый Океан и сообщество, создающее историю вместе.</p>
+        <a href="https://t.me/твой_бот" target="_blank" class="btn-main">Подать заявку через Telegram</a>
+    </section>
+
+    <div class="container">
+
+        <!-- О сервере -->
+        <div id="about">
+            <h2 class="section-title">О проекте</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>🧭 Атмосферный лор</h3>
+                    <p>Никакого привычного F3 — только ориентирование по местности и компасу. Выживание на ограниченной территории таинственного острова.</p>
+                </div>
+                <div class="card">
+                    <h3>🎙️ Живое общение</h3>
+                    <p>Поддержка Simple Voice Chat позволяет слышать шепот, эхо в пещерах и голоса других игроков прямо в игре.</p>
+                </div>
+                <div class="card">
+                    <h3>🔒 Приватное сообщество</h3>
+                    <p>Попасть на сервер можно только через отбор бота и одобрение Совета. Никаких случайных игроков и гриферства.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- История -->
+        <div id="history">
+            <h2 class="section-title">История и Сезоны</h2>
+            <div class="card" style="margin-bottom: 60px;">
+                <h3>Сезон I: Истоки Острова</h3>
+                <p>Первый сезон проекта Solara объединил игроков с легендарных серверов, включая Horus. Корабли исследователей оказались заперты среди водных глубин, окруженных Мертвым Океаном. История этого мира пишется прямо сейчас руками участников.</p>
+            </div>
+        </div>
+
+        <!-- Как попасть -->
+        <div id="join">
+            <h2 class="section-title">Как попасть на сервер</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>1. Заявка</h3>
+                    <p>Запустите нашего официального Telegram-бота и ответьте на вопросы анкеты.</p>
+                </div>
+                <div class="card">
+                    <h3>2. Рассмотрение</h3>
+                    <p>Совет Solara изучит вашу заявку и отправит решение прямо в чат с ботом.</p>
+                </div>
+                <div class="card">
+                    <h3>3. Допуск</h3>
+                    <p>Получите доступ к закрытому сообществу и добро пожаловать на остров!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Техническая часть -->
+        <div id="tech">
+            <h2 class="section-title">На чём работает сервер</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Ядро и Версия</h3>
+                    <p>Fabric / Vanilla+ на актуальной версии Minecraft с высокой оптимизацией.</p>
+                </div>
+                <div class="card">
+                    <h3>Клиентская сборка</h3>
+                    <p>Список официальных клиентских модов и ресурспаков сейчас находится в разработке.</p>
+                    <span class="status-badge">Информация обновляется...</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2026 Solara SMP Project. Все права защищены.</p>
+    </footer>
+
+</body>
+</html>
