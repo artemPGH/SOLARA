@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✦ Solara SMP ✦</title>
+    <title>✦ Solara SMP — Официальный портал</title>
     <style>
         :root {
             --bg-dark: #07050d;
@@ -293,7 +293,7 @@
                 </div>
                 <div class="card">
                     <h3>2. Заполнение анкеты</h3>
-                    <p>Ответьте на 6 вопросов хранителя вестей (никнейм, возраст, микрофон, ответы на кейсы, медиа и планы на сезон).</p>
+                    <p>Ответьте на вопросы хранителя вестей (никнейм, возраст, микрофон, ответы на кейсы, медиа и планы на сезон).</p>
                 </div>
                 <div class="card">
                     <h3>3. Одобрение Совета</h3>
@@ -309,22 +309,23 @@
         <!-- 4. МЕДИА И YOUTUBE -->
         <section id="page-media" class="page">
             <h1 class="page-title">Медиа & Контент-мейкеры</h1>
-            <p class="page-subtitle">Мы рады стримерам и ютуберам любого масштаба!</p>
+            <p class="page-subtitle">Следите за развитием сезона на официальном канале сервера!</p>
 
             <div class="card" style="margin-bottom: 25px;">
-                <h3>🔴 YouTube-канал создателя проекта</h3>
-                <p>Хотите узнать больше о проекте, следить за видео-дневниками сезона или посмотреть ролики от участников?</p>
-                <a href="https://youtube.com/@tema-show" target="_blank" class="btn btn-primary" style="margin-top: 15px;">▶ Перейти на YouTube-канал</a>
+                <h3>🔴 Официальный YouTube-канал Solara SMP</h3>
+                <p>Главный медиа-хаб проекта. Здесь будут выходить официальные трейлеры сезонов, масштабные ивенты, кинематики и истории нашего острова.</p>
+                <a href="https://www.youtube.com/@solara_smp" target="_blank" class="btn btn-primary" style="margin-top: 15px;">▶ Перейти на канал @solara_smp</a>
             </div>
 
             <div class="grid">
                 <div class="card">
-                    <h3>🎥 Для авторов контента</h3>
-                    <p>Если вы снимаете ролики или проводите трансляции — укажите это при подаче заявки в боте. Мы оказываем информационную поддержку активным медиа-участникам.</p>
+                    <h3>🎬 Каналы участников</h3>
+                    <p>Список каналов и стримов наших игроков появится здесь сразу после завершения набора и старта Первого Сезона.</p>
+                    <span class="badge">Формируется по результатам набора</span>
                 </div>
                 <div class="card">
-                    <h3>🎬 Ролики участников</h3>
-                    <p>Все видеоматериалы и хайлайты сезона будут публиковаться в специальной теме закрытого Telegram-чата.</p>
+                    <h3>🎥 Для авторов контента</h3>
+                    <p>Планируешь снимать ролики или проводить стримы по Solara? Укажи это при подаче заявки в боте — мы поддержим твои видео на ресурсах проекта!</p>
                 </div>
             </div>
         </section>
@@ -358,25 +359,20 @@
 
     <script>
         function switchPage(pageId) {
-            // Скрываем все страницы
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
             });
-            // Убираем активный класс у кнопок
             document.querySelectorAll('.nav-link').forEach(btn => {
                 btn.classList.remove('active');
             });
 
-            // Показываем нужную страницу
             document.getElementById('page-' + pageId).classList.add('active');
 
-            // Подсвечиваем активную кнопку
             const activeBtn = Array.from(document.querySelectorAll('.nav-link')).find(btn => 
                 btn.getAttribute('onclick').includes(pageId)
             );
             if(activeBtn) activeBtn.classList.add('active');
 
-            // Скролл наверх
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
