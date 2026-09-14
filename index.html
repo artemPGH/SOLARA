@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✦ Solara SMP — Официальный сайт</title>
+    <title>✦ Solara SMP ✦</title>
     <style>
         :root {
-            --bg-color: #0b0914;
-            --card-bg: #141125;
-            --card-border: #262040;
-            --accent-purple: #a855f7;
-            --accent-pink: #ec4899;
+            --bg-dark: #07050d;
+            --bg-card: #120e24;
+            --bg-card-hover: #1c1638;
+            --border: #2d2250;
+            --purple: #a855f7;
+            --pink: #ec4899;
             --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
+            --text-muted: #a1a1aa;
         }
 
         * {
@@ -23,241 +24,361 @@
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-dark);
             color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Шапка */
+        /* Навигация */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 8%;
-            background: rgba(11, 9, 20, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--card-border);
+            padding: 18px 8%;
+            background: rgba(7, 5, 13, 0.9);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        nav a {
-            color: var(--text-muted);
-            text-decoration: none;
-            margin-left: 25px;
-            font-size: 0.95rem;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: var(--accent-pink);
-        }
-
-        /* Главный баннер (Hero) */
-        .hero {
-            text-align: center;
-            padding: 100px 20px;
-            background: radial-gradient(circle at center, #1e1338 0%, var(--bg-color) 70%);
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
+            font-size: 1.4rem;
             font-weight: 900;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-link {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--text-main);
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        /* Контейнер страниц */
+        main {
+            flex: 1;
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Заголовки */
+        .page-title {
+            font-size: 2.4rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--purple), var(--pink));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .hero p {
-            font-size: 1.2rem;
+        .page-subtitle {
             color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto 30px auto;
+            margin-bottom: 35px;
+            font-size: 1.05rem;
         }
 
-        .btn-main {
-            display: inline-block;
-            padding: 14px 32px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-            color: #fff;
-            font-weight: 700;
-            text-decoration: none;
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .btn-main:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(236, 72, 153, 0.6);
-        }
-
-        /* Основной контент */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 60px 20px;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 30px;
-            border-left: 4px solid var(--accent-purple);
-            padding-left: 15px;
-        }
-
+        /* Карточки */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 60px;
+            gap: 20px;
         }
 
         .card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 25px;
-            transition: border-color 0.3s;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 28px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .card:hover {
-            border-color: var(--accent-purple);
+            background: var(--bg-card-hover);
+            border-color: var(--purple);
+            transform: translateY(-3px);
         }
 
         .card h3 {
-            color: var(--accent-pink);
-            margin-bottom: 10px;
+            color: var(--pink);
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .card p {
             color: var(--text-muted);
             font-size: 0.95rem;
+            line-height: 1.6;
         }
 
-        .status-badge {
+        /* Кнопки */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+            color: #fff;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.35);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 30px rgba(236, 72, 153, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--purple);
+        }
+
+        .badge {
             display: inline-block;
-            background: rgba(168, 85, 247, 0.15);
-            color: var(--accent-purple);
-            border: 1px solid var(--accent-purple);
+            background: rgba(236, 72, 153, 0.15);
+            color: var(--pink);
+            border: 1px solid var(--pink);
             padding: 4px 12px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
+            font-weight: 600;
             margin-top: 15px;
         }
 
         /* Футер */
         footer {
             text-align: center;
-            padding: 30px;
-            border-top: 1px solid var(--card-border);
+            padding: 25px;
+            border-top: 1px solid var(--border);
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; }
+            nav { flex-wrap: wrap; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">✦ SOLARA</div>
+        <div class="logo" onclick="switchPage('home')">✦ SOLARA</div>
         <nav>
-            <a href="#about">О сервере</a>
-            <a href="#history">История</a>
-            <a href="#join">Как попасть</a>
-            <a href="#tech">Сборка</a>
+            <button class="nav-link active" onclick="switchPage('home')">Главная</button>
+            <button class="nav-link" onclick="switchPage('about')">О сервере</button>
+            <button class="nav-link" onclick="switchPage('apply')">Как попасть</button>
+            <button class="nav-link" onclick="switchPage('media')">Медиа</button>
+            <button class="nav-link" onclick="switchPage('tech')">Техническая часть</button>
         </nav>
     </header>
 
-    <section class="hero">
-        <h1>SOLARA PROJECT</h1>
-        <p>Изолированный остров, Мертвый Океан и сообщество, создающее историю вместе.</p>
-        <a href="https://t.me/solara_smp_bot" target="_blank" class="btn-main">Подать заявку через Telegram</a>
-    </section>
+    <main>
+        <!-- 1. ГЛАВНАЯ СТРАНИЦА -->
+        <section id="page-home" class="page active">
+            <div style="text-align: center; padding: 60px 0;">
+                <h1 class="page-title" style="font-size: 3.5rem;">SOLARA PROJECT</h1>
+                <p class="page-subtitle" style="font-size: 1.2rem; max-width: 650px; margin: 0 auto 30px auto;">
+                    Приватно-ванильный SMP-сервер нового поколения. Изолированный мир, Мертвый Океан и история, создаваемая игроками.
+                </p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="https://t.me/solara_smp_bot" target="_blank" class="btn btn-primary">🤖 Подать заявку через Telegram</a>
+                    <button onclick="switchPage('about')" class="btn btn-secondary">📜 Узнать подробнее</button>
+                </div>
+            </div>
 
-    <div class="container">
+            <div class="grid" style="margin-top: 40px;">
+                <div class="card">
+                    <h3>🌊 Изолированная локация</h3>
+                    <p>Действия разворачиваются на ограниченной территории. Опасный океан вокруг хранит свои секреты.</p>
+                </div>
+                <div class="card">
+                    <h3>🤝 Сообщество Horus</h3>
+                    <p>Проект объединил опытных игроков с сервера Horus и новых участников, прошлых строгий отбор.</p>
+                </div>
+                <div class="card">
+                    <h3>🎙️ Голосовой чат</h3>
+                    <p>Полное погружение в игровой процесс благодаря объёмному позиционному звуку Simple Voice Chat.</p>
+                </div>
+            </div>
+        </section>
 
-        <!-- О сервере -->
-        <div id="about">
-            <h2 class="section-title">О проекте</h2>
+        <!-- 2. О СЕРВЕРЕ И ЛОР -->
+        <section id="page-about" class="page">
+            <h1 class="page-title">О сервере и Лор</h1>
+            <p class="page-subtitle">Минимализм, выживание и командное взаимодействие без лишних спойлеров.</p>
+
             <div class="grid">
                 <div class="card">
-                    <h3>🧭 Атмосферный лор</h3>
-                    <p>Никакого привычного F3 — только ориентирование по местности и компасу. Выживание на ограниченной территории таинственного острова.</p>
+                    <h3>🧭 Ориентирование по миру</h3>
+                    <p>Экран F3 не покажет вам exact-координаты. Игрокам предстоит заново учиться читать карту, ориентироваться по ландшафту и использовать специальные инструменты навигации.</p>
                 </div>
                 <div class="card">
-                    <h3>🎙️ Живое общение</h3>
-                    <p>Поддержка Simple Voice Chat позволяет слышать шепот, эхо в пещерах и голоса других игроков прямо в игре.</p>
+                    <h3>📜 Атмосфера Первого Сезона</h3>
+                    <p>Мы только начинаем писать историю Solara. Все постройки, города, инфраструктура и торгово-экономические связи будут создаваться участниками с нуля.</p>
                 </div>
                 <div class="card">
-                    <h3>🔒 Приватное сообщество</h3>
-                    <p>Попасть на сервер можно только через отбор бота и одобрение Совета. Никаких случайных игроков и гриферства.</p>
+                    <h3>🌊 Тайна Мертвого Океана</h3>
+                    <p>Остров заблокирован природной аномалией. Можно попытаться уплыть вдаль на лодке, но сработает ли это и чем закончится попытка — узнаете только в игре.</p>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- История -->
-        <div id="history">
-            <h2 class="section-title">История и Сезоны</h2>
-            <div class="card" style="margin-bottom: 60px;">
-                <h3>Сезон I: Истоки Острова</h3>
-                <p>Первый сезон проекта Solara объединил игроков с легендарных серверов, включая Horus. Корабли исследователей оказались заперты среди водных глубин, окруженных Мертвым Океаном. История этого мира пишется прямо сейчас руками участников.</p>
-            </div>
-        </div>
+        <!-- 3. КАК ПОПАСТЬ -->
+        <section id="page-apply" class="page">
+            <h1 class="page-title">Как попасть на Solara</h1>
+            <p class="page-subtitle">Строгий отбор гарантирует отсутствие гриферства и высокий уровень адекватности.</p>
 
-        <!-- Как попасть -->
-        <div id="join">
-            <h2 class="section-title">Как попасть на сервер</h2>
             <div class="grid">
                 <div class="card">
-                    <h3>1. Заявка</h3>
-                    <p>Запустите нашего официального Telegram-бота и ответьте на вопросы анкеты.</p>
+                    <h3>1. Запуск бота</h3>
+                    <p>Перейдите в наш официальный Telegram-бот и запустите диалог командой <code>/start</code>.</p>
                 </div>
                 <div class="card">
-                    <h3>2. Рассмотрение</h3>
-                    <p>Совет Solara изучит вашу заявку и отправит решение прямо в чат с ботом.</p>
+                    <h3>2. Заполнение анкеты</h3>
+                    <p>Ответьте на 6 вопросов хранителя вестей (никнейм, возраст, микрофон, ответы на кейсы, медиа и планы на сезон).</p>
                 </div>
                 <div class="card">
-                    <h3>3. Допуск</h3>
-                    <p>Получите доступ к закрытому сообществу и добро пожаловать на остров!</p>
+                    <h3>3. Одобрение Совета</h3>
+                    <p>Администрация изучит заявку. Отслеживать статус в режиме реального времени можно командой <code>/status</code>.</p>
                 </div>
             </div>
-        </div>
 
-        <!-- Техническая часть -->
-        <div id="tech">
-            <h2 class="section-title">На чём работает сервер</h2>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="https://t.me/solara_smp_bot" target="_blank" class="btn btn-primary">🤖 Открыть @solara_smp_bot</a>
+            </div>
+        </section>
+
+        <!-- 4. МЕДИА И YOUTUBE -->
+        <section id="page-media" class="page">
+            <h1 class="page-title">Медиа & Контент-мейкеры</h1>
+            <p class="page-subtitle">Мы рады стримерам и ютуберам любого масштаба!</p>
+
+            <div class="card" style="margin-bottom: 25px;">
+                <h3>🔴 YouTube-канал создателя проекта</h3>
+                <p>Хотите узнать больше о проекте, следить за видео-дневниками сезона или посмотреть ролики от участников?</p>
+                <a href="https://youtube.com/@tema-show" target="_blank" class="btn btn-primary" style="margin-top: 15px;">▶ Перейти на YouTube-канал</a>
+            </div>
+
             <div class="grid">
                 <div class="card">
-                    <h3>Ядро и Версия</h3>
-                    <p>Fabric / Vanilla+ на актуальной версии Minecraft с высокой оптимизацией.</p>
+                    <h3>🎥 Для авторов контента</h3>
+                    <p>Если вы снимаете ролики или проводите трансляции — укажите это при подаче заявки в боте. Мы оказываем информационную поддержку активным медиа-участникам.</p>
                 </div>
                 <div class="card">
-                    <h3>Клиентская сборка</h3>
-                    <p>Список официальных клиентских модов и ресурспаков сейчас находится в разработке.</p>
-                    <span class="status-badge">Информация обновляется...</span>
+                    <h3>🎬 Ролики участников</h3>
+                    <p>Все видеоматериалы и хайлайты сезона будут публиковаться в специальной теме закрытого Telegram-чата.</p>
                 </div>
             </div>
-        </div>
+        </section>
 
-    </div>
+        <!-- 5. ТЕХНИЧЕСКАЯ ЧАСТЬ -->
+        <section id="page-tech" class="page">
+            <h1 class="page-title">Техническая часть</h1>
+            <p class="page-subtitle">Информация о сервере и используемых технологиях.</p>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>🖥️ Серверная платформа</h3>
+                    <p>Сервер работает на ядрах Fabric с максимальной оптимизацией прогрузки чанков и тиков для комфортной игры без лагов.</p>
+                </div>
+                <div class="card">
+                    <h3>📦 Клиентский модпак / Сборка</h3>
+                    <p>Официальный клиентский модпак с уникальными модификациями будет полностью опубликован в открытый доступ <b>только в конце Первого Сезона</b>.</p>
+                    <span class="badge">Релиз по завершению сезона</span>
+                </div>
+                <div class="card">
+                    <h3>⚙️ Игровые правила</h3>
+                    <p>На сервере оптимизированы параметры спавна сущностей, отключен урон от огня по постройкам и установлены кастомные механики мира.</p>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <footer>
-        <p>© 2026 Solara SMP Project. Все права защищены.</p>
+        <p>© 2026 Solara SMP. Все права защищены.</p>
     </footer>
 
+    <script>
+        function switchPage(pageId) {
+            // Скрываем все страницы
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            // Убираем активный класс у кнопок
+            document.querySelectorAll('.nav-link').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Показываем нужную страницу
+            document.getElementById('page-' + pageId).classList.add('active');
+
+            // Подсвечиваем активную кнопку
+            const activeBtn = Array.from(document.querySelectorAll('.nav-link')).find(btn => 
+                btn.getAttribute('onclick').includes(pageId)
+            );
+            if(activeBtn) activeBtn.classList.add('active');
+
+            // Скролл наверх
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
 </body>
 </html>
