@@ -1,381 +1,112 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="/SOLARA_LOGO.png">
-    <title>✦ Solara SMP — Официальный портал</title>
-    <style>
-        :root {
-            --bg-dark: #07050d;
-            --bg-card: #120e24;
-            --bg-card-hover: #1c1638;
-            --border: #2d2250;
-            --purple: #a855f7;
-            --pink: #ec4899;
-            --text-main: #f3f4f6;
-            --text-muted: #a1a1aa;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Навигация */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 8%;
-            background: rgba(7, 5, 13, 0.9);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 1.4rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--purple), var(--pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 2px;
-            cursor: pointer;
-        }
-
-        nav {
-            display: flex;
-            gap: 15px;
-        }
-
-        .nav-link {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            color: var(--text-main);
-            background: rgba(168, 85, 247, 0.15);
-            border: 1px solid rgba(168, 85, 247, 0.3);
-        }
-
-        /* Контейнер страниц */
-        main {
-            flex: 1;
-            max-width: 1100px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .page {
-            display: none;
-            animation: fadeIn 0.4s ease forwards;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Заголовки */
-        .page-title {
-            font-size: 2.4rem;
-            font-weight: 900;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, var(--purple), var(--pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .page-subtitle {
-            color: var(--text-muted);
-            margin-bottom: 35px;
-            font-size: 1.05rem;
-        }
-
-        /* Карточки */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 28px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .card:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--purple);
-            transform: translateY(-3px);
-        }
-
-        .card h3 {
-            color: var(--pink);
-            font-size: 1.25rem;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .card p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* Кнопки */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 28px;
-            border-radius: 8px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.25s ease;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--purple), var(--pink));
-            color: #fff;
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.35);
-        }
-
-        .btn-primary:hover {
-            box-shadow: 0 0 30px rgba(236, 72, 153, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-main);
-            border: 1px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--purple);
-        }
-
-        .badge {
-            display: inline-block;
-            background: rgba(236, 72, 153, 0.15);
-            color: var(--pink);
-            border: 1px solid var(--pink);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-top: 15px;
-        }
-
-        /* Футер */
-        footer {
-            text-align: center;
-            padding: 25px;
-            border-top: 1px solid var(--border);
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-top: auto;
-        }
-
-        @media (max-width: 768px) {
-            header { flex-direction: column; gap: 15px; }
-            nav { flex-wrap: wrap; justify-content: center; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090512">
+<title>Solara SMP — Официальный портал</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#090512;--panel:#151027;--panel2:#20163b;--line:#39245f;--text:#f4edff;--muted:#b3a5c9;--gold:#c45cff;--red:#ff4fd8;--max:1260px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 50% 0,#28104c 0,transparent 52%),var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;min-height:100vh}
+a{color:inherit;text-decoration:none}button,input,textarea{font:inherit}button{cursor:pointer}
+.topbar{height:64px;position:sticky;top:0;z-index:20;background:rgba(8,5,16,.94);backdrop-filter:blur(14px);border-bottom:1px solid rgba(196,92,255,.2)}
+.navwrap{max-width:var(--max);height:100%;margin:auto;padding:0 24px;display:flex;align-items:center;gap:28px}
+.brand{font-family:"Russo One",sans-serif;white-space:nowrap;font-size:20px;display:flex;align-items:center;gap:10px}.brand-mark{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 0 9px #b84cff)}
+nav{display:flex;align-items:center;gap:5px;flex:1;overflow:auto}nav button{white-space:nowrap;background:none;border:0;color:var(--muted);padding:10px 12px;border-radius:9px;font-size:13px;font-weight:600}nav button:hover,nav button.active{color:var(--text);background:#ffffff0d}
+.live{white-space:nowrap;color:#ff6a5e;background:#2b1040;border:1px solid #7135a0;padding:8px 13px;border-radius:30px;font-size:12px;font-weight:700}
+main{max-width:var(--max);padding:34px 24px 70px;margin:auto}.page{display:none;animation:appear .3s ease}.page.active{display:block}@keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center;min-height:390px;margin-bottom:66px}
+.hero-copy{padding:28px 0}.eyebrow{color:var(--gold);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase}.hero h1{font-family:"Russo One",sans-serif;font-size:clamp(42px,6vw,76px);line-height:1.03;margin:17px 0 20px;letter-spacing:-2px}.hero p{color:#b3a5c9;font-size:18px;line-height:1.7;max-width:600px}.accent{color:var(--gold)}
+.hero-art{min-height:360px;border:1px solid #63359a;border-radius:22px;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 45%,#421078 0,#1a0d31 48%,#090512 100%);box-shadow:0 24px 70px #5e16a044}
+.hero-art:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,#8b22d455,transparent 68%);opacity:1}
+.hero-art:after{content:""}
+.hero-logo{position:absolute;z-index:1;left:50%;top:50%;transform:translate(-50%,-50%);width:min(76%,390px);height:auto;object-fit:contain;filter:drop-shadow(0 0 34px #a020ff99)}.art-caption{position:absolute;top:22px;left:24px;z-index:1;color:#e6b8ff;font-size:11px;letter-spacing:2px;font-weight:800}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.btn{border:1px solid var(--line);padding:12px 17px;border-radius:10px;background:#ffffff09;color:var(--text);font-weight:700;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn.primary{background:linear-gradient(135deg,#a83dff,#ed4bd7);border-color:#c45cff;color:#fff}.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin:0 0 20px}.section-head h2,.page-title{font-family:"Russo One",sans-serif;font-size:27px;margin:0}.section-head span{font-size:12px;color:var(--muted)}
+.home-grid{display:grid;grid-template-columns:1.8fr 1fr;gap:34px}.video-grid,.card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.tile,.panel{background:linear-gradient(145deg,#1d1530,#100b1d);border:1px solid var(--line);border-radius:16px;overflow:hidden}.tile-image{height:190px;background:linear-gradient(135deg,#4d2180,#130b24);display:flex;align-items:center;justify-content:center;color:#d7a2ff;font-size:38px}.tile-body{padding:17px}.tile h3,.panel h3{font-size:16px;margin:0 0 9px}.tile p,.panel p{color:var(--muted);font-size:13px;line-height:1.65;margin:0}.news-list{display:grid;gap:12px}.news-item{padding:15px;background:#ffffff06;border:1px solid #ffffff0c;border-radius:12px}.news-item time{color:var(--gold);font-size:11px;font-weight:800}.news-item h3{font-size:14px;margin:7px 0}.news-item p{font-size:12px;color:var(--muted);line-height:1.5}
+.panel{padding:22px}.panel+.panel{margin-top:16px}.page-intro{color:var(--muted);line-height:1.7;margin:10px 0 28px;max-width:760px}
+.timeline{position:relative;margin:28px 0 0 8px;padding-left:28px;border-left:1px solid #8b42c9;display:grid;gap:20px}.event{position:relative;padding:0 0 3px}.event:before{content:"";position:absolute;left:-34px;top:3px;width:11px;height:11px;background:var(--bg);border:2px solid var(--gold);border-radius:50%}.event time{font-size:12px;color:var(--gold);font-weight:800}.event h3{font-size:16px;margin:7px 0}.event p{font-size:14px;line-height:1.7;color:#c5b5dc;margin:0}
+.creator{padding:0;display:flex;flex-direction:column}.creator-cover{height:155px;background:linear-gradient(135deg,#4d2180,#130b24);display:flex;align-items:center;justify-content:center;font-size:46px}.creator-info{padding:19px}.creator-info h3{margin:0 0 7px}.role{display:inline-block;color:#fff;background:linear-gradient(135deg,#a83dff,#ed4bd7);padding:5px 9px;border-radius:30px;font-size:10px;font-weight:900;margin-bottom:12px}
+.empty{padding:28px;border:1px dashed #68458f;border-radius:14px;color:var(--muted);text-align:center;line-height:1.7}
+footer{border-top:1px solid var(--line);padding:26px;text-align:center;color:#8f8174;font-size:12px}.footer-admin{display:block;margin:10px auto 4px;background:none;border:0;color:#77658e;font-size:11px;text-decoration:underline}.footer-admin:hover{color:#d7a2ff}
+.modal{position:fixed;inset:0;background:#000b;z-index:50;display:none;align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.modal-box{width:min(520px,100%);max-height:90vh;overflow:auto;background:#151027;border:1px solid #63359a;border-radius:18px;padding:24px;box-shadow:0 20px 80px #000b}.modal-box h2{font-family:"Russo One";margin:0 0 18px}.field{display:grid;gap:7px;margin:13px 0}.field label{font-size:12px;color:#c5b5dc;font-weight:700}.field input,.field textarea{width:100%;background:#0b0715;border:1px solid #49316c;border-radius:9px;color:var(--text);padding:12px;outline:none}.field textarea{min-height:100px;resize:vertical}.field input:focus,.field textarea:focus{border-color:var(--gold)}.admin-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}.admin-only{display:none}.admin-only.show{display:block}.small{font-size:11px;color:var(--muted);line-height:1.6}.danger{border-color:#7135a0;color:#ff9be8}.hidden{display:none!important}
+@media(max-width:850px){.navwrap{gap:12px}.live{display:none}.hero{grid-template-columns:1fr}.hero-art{min-height:260px}.home-grid{grid-template-columns:1fr}.hero{margin-bottom:42px}}
+@media(max-width:600px){.topbar{height:auto}.navwrap{padding:12px 15px;flex-wrap:wrap}.brand{width:100%}nav{width:100%;padding-bottom:2px}main{padding:24px 15px 50px}.video-grid,.card-grid{grid-template-columns:1fr}.hero h1{font-size:43px}.hero p{font-size:15px}.section-head h2,.page-title{font-size:23px}}
+</style>
 </head>
 <body>
+<header class="topbar"><div class="navwrap">
+<a class="brand" href="#" onclick="showPage('home');return false"><img class="brand-mark" src="logo.png" alt="Логотип Solara"> SOLARA SMP</a>
+<nav id="mainNav">
+<button class="active" data-page="home">Главная</button><button data-page="lore">Лор</button><button data-page="players">Участники</button><button data-page="media">Медиа</button><button data-page="news">Новости</button><button data-page="about">О проекте</button><button id="adminNav" class="hidden" data-page="admin">Админ-панель</button>
+</nav><span class="live">● 1-Й СЕЗОН</span>
+</div></header>
+<main>
+<section id="page-home" class="page active">
+<div class="hero"><div class="hero-copy"><div class="eyebrow">Официальный портал · Minecraft SMP</div><h1>МИР, КОТОРЫЙ<br><span class="accent">СКРЫВАЕТ</span><br>БОЛЬШЕ</h1><p>Приватный Minecraft-проект, где игроки создают собственную историю с самого начала. Исследуй остров, раскрывай тайны Мёртвого океана и стань частью первого сезона.</p><div class="actions"><button class="btn primary" onclick="showPage('lore')">📜 Читать лор</button><a class="btn" href="https://t.me/solara_smp_bot" target="_blank" rel="noopener">Подать заявку ↗</a></div></div><div class="hero-art"><div class="art-caption">СЕЗОН I · ИСТОРИЯ НАЧИНАЕТСЯ</div><img class="hero-logo" src="logo.png" alt="Эмблема Solara"></div></div>
+<div class="home-grid"><div><div class="section-head"><h2>ПОСЛЕДНИЕ СОБЫТИЯ</h2><span>Хроника сезона</span></div><div id="homeLore" class="news-list"></div></div><aside><div class="section-head"><h2>НОВОСТИ</h2><span>Обновления проекта</span></div><div id="homeNews" class="news-list"></div></aside></div>
+</section>
+<section id="page-lore" class="page"><h1 class="page-title">ХРОНИКА И ЛОР</h1><p class="page-intro">История Solara складывается из открытий, решений и поступков игроков. Здесь собраны известные события сезона — от первых дней первого сезона до самых свежих записей.</p><div id="loreList" class="timeline"></div><div id="loreEmpty" class="empty hidden">Записей пока нет. Загляни сюда позже — история только пишется.</div></section>
+<section id="page-players" class="page"><h1 class="page-title">УЧАСТНИКИ ПРОЕКТА</h1><p class="page-intro">Авторы, стримеры и игроки, которые создают историю Solara SMP.</p><div id="creatorList" class="card-grid"></div><div id="creatorEmpty" class="empty hidden">Участники появятся здесь после добавления администрацией.</div></section>
+<section id="page-media" class="page"><h1 class="page-title">МЕДИА И КОНТЕНТ</h1><p class="page-intro">Видео, трансляции и материалы о жизни проекта.</p><div class="panel"><h3>Официальный YouTube-канал</h3><p>Главный медиа-хаб проекта: трейлеры, события и истории острова.</p><div class="actions"><a class="btn primary" href="https://www.youtube.com/@solara_smp" target="_blank" rel="noopener">▶ Открыть канал</a></div></div><div class="panel"><h3>Контент участников</h3><p>Ссылки на каналы участников доступны в разделе «Участники».</p></div></section>
+<section id="page-news" class="page"><h1 class="page-title">НОВОСТИ ПРОЕКТА</h1><p class="page-intro">Объявления, обновления и важные сообщения администрации.</p><div id="newsList" class="news-list"></div><div id="newsEmpty" class="empty hidden">Новостей пока нет.</div></section>
+<section id="page-about" class="page"><h1 class="page-title">О ПРОЕКТЕ SOLARA</h1><p class="page-intro">Приватно-ванильный SMP-проект с собственной атмосферой, механиками и историей, которую создают участники.</p><div class="card-grid">
+<div class="panel"><h3>🌊 Изолированная локация</h3><p>Действия разворачиваются на ограниченной территории. Опасный океан вокруг хранит свои секреты.</p></div>
+<div class="panel"><h3>🧭 Исследование мира</h3><p>Игрокам предстоит ориентироваться по ландшафту и открывать новые места.</p></div>
+<div class="panel"><h3>🎙️ Голосовое общение</h3><p>Позиционный звук Simple Voice Chat помогает глубже погрузиться в игровой процесс.</p></div>
+<div class="panel"><h3>⚙️ Техническая основа</h3><p>Сервер использует Fabric и дополнительные механики мира. Клиентская сборка публикуется по правилам проекта.</p></div>
+</div><div class="panel" style="margin-top:18px"><h3>Как попасть на сервер</h3><p>Запусти официального Telegram-бота, заполни анкету и дождись решения администрации.</p><div class="actions"><a class="btn primary" href="https://t.me/solara_smp_bot" target="_blank" rel="noopener">Открыть Telegram-бота ↗</a></div></div></section>
+<section id="page-admin" class="page"><div id="adminPanel" class="panel admin-only">
+<h2 style="font-family:'Russo One';margin:0">ПАНЕЛЬ АДМИНИСТРАТОРА</h2><p class="small">Добавляй записи в хронику, новости и список авторов. Изменения сохраняются в базе данных.</p>
+<div class="admin-toolbar"><button class="btn primary" onclick="openEditor('lore')">＋ Добавить событие лора</button><button class="btn" onclick="openEditor('news')">＋ Добавить новость</button><button class="btn" onclick="openEditor('creator')">＋ Добавить участника</button><button class="btn danger" id="logoutBtn">Выйти</button></div>
+<div class="small">Для удаления записей используй кнопку «Удалить» рядом с записью ниже.</div>
+<div id="adminRecords"></div>
+</div></section>
+</main>
+<footer>© 2026 Solara SMP · Официальный портал проекта<br><button id="adminOpen" class="footer-admin">Вход для администрации</button><span id="adminStatus" class="small"></span></footer>
 
-    <header>
-        <div class="logo" onclick="switchPage('home')">✦ SOLARA</div>
-        <nav>
-            <button class="nav-link active" onclick="switchPage('home')">Главная</button>
-            <button class="nav-link" onclick="switchPage('about')">О сервере</button>
-            <button class="nav-link" onclick="switchPage('apply')">Как попасть</button>
-            <button class="nav-link" onclick="switchPage('media')">Медиа</button>
-            <button class="nav-link" onclick="switchPage('tech')">Техническая часть</button>
-        </nav>
-    </header>
+<div class="modal" id="loginModal"><div class="modal-box"><h2>ВХОД АДМИНИСТРАТОРА</h2><p class="small">Войди через аккаунт, которому выданы права администратора.</p><form id="loginForm"><div class="field"><label>Email</label><input type="email" id="loginEmail" required autocomplete="username"></div><div class="field"><label>Пароль</label><input type="password" id="loginPassword" required autocomplete="current-password"></div><button class="btn primary" type="submit">Войти</button> <button class="btn" type="button" onclick="closeModal('loginModal')">Отмена</button><p id="loginError" class="small"></p></form></div></div>
+<div class="modal" id="editModal"><div class="modal-box"><h2 id="editTitle">НОВАЯ ЗАПИСЬ</h2><form id="editForm"><input type="hidden" id="editType"><div class="field"><label>Заголовок / имя</label><input id="editName" maxlength="120" required></div><div class="field" id="descField"><label>Описание / текст</label><textarea id="editDesc" maxlength="5000" required></textarea></div><div class="field" id="dateField"><label>Дата (например, 1 ноября 2026)</label><input id="editDate" maxlength="60"></div><div class="field" id="urlField"><label>Ссылка (YouTube / источник)</label><input id="editUrl" type="url" placeholder="https://..."></div><div class="field" id="roleField"><label>Роль участника</label><input id="editRole" value="Участник сезона"></div><div class="field" id="featuredField"><label><input type="checkbox" id="editFeatured" style="width:auto"> Главный ютубер сезона</label></div><button class="btn primary" type="submit">Сохранить</button> <button class="btn" type="button" onclick="closeModal('editModal')">Отмена</button><p id="editError" class="small"></p></form></div></div>
 
-    <main>
-        <!-- 1. ГЛАВНАЯ СТРАНИЦА -->
-        <section id="page-home" class="page active">
-            <div style="text-align: center; padding: 60px 0;">
-                <h1 class="page-title" style="font-size: 3.5rem;">SOLARA PROJECT</h1>
-                <p class="page-subtitle" style="font-size: 1.2rem; max-width: 650px; margin: 0 auto 30px auto;">
-                    Приватно-ванильный SMP-сервер нового поколения. Изолированный мир, Мертвый Океан и история, создаваемая игроками.
-                </p>
-                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                    <a href="https://t.me/solara_smp_bot" target="_blank" class="btn btn-primary">🤖 Подать заявку через Telegram</a>
-                    <button onclick="switchPage('about')" class="btn btn-secondary">📜 Узнать подробнее</button>
-                </div>
-            </div>
+<script>
+// Вставь URL проекта Supabase и anon/public key из Settings → API.
+const SUPABASE_URL = "ВСТАВЬ_SUPABASE_PROJECT_URL";
+const SUPABASE_ANON_KEY = "ВСТАВЬ_SUPABASE_ANON_KEY";
+// UUID администратора из Authentication → Users. Не является секретом.
+const ADMIN_UID = "ВСТАВЬ_UUID_АДМИНИСТРАТОРА";
+const configured = SUPABASE_URL.startsWith("https://") && !SUPABASE_URL.includes("ВСТАВЬ_") && SUPABASE_ANON_KEY.length > 20 && !ADMIN_UID.includes("ВСТАВЬ_");
+let db = null, currentUser = null, cached = {lore:[],news:[],creators:[]};
 
-            <div class="grid" style="margin-top: 40px;">
-                <div class="card">
-                    <h3>🌊 Изолированная локация</h3>
-                    <p>Действия разворачиваются на ограниченной территории. Опасный океан вокруг хранит свои секреты.</p>
-                </div>
-                <div class="card">
-                    <h3>🤝 Сообщество Horus</h3>
-                    <p>Проект объединил опытных игроков с сервера Horus и новых участников, прошлых строгий отбор.</p>
-                </div>
-                <div class="card">
-                    <h3>🎙️ Голосовой чат</h3>
-                    <p>Полное погружение в игровой процесс благодаря объёмному позиционному звуку Simple Voice Chat.</p>
-                </div>
-            </div>
-        </section>
+if(configured && window.supabase) db = window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
-        <!-- 2. О СЕРВЕРЕ И ЛОР -->
-        <section id="page-about" class="page">
-            <h1 class="page-title">О сервере и Лор</h1>
-            <p class="page-subtitle">Минимализм, выживание и командное взаимодействие без лишних спойлеров.</p>
-
-            <div class="grid">
-                <div class="card">
-                    <h3>🧭 Ориентирование по миру</h3>
-                    <p>Экран F3 не покажет вам exact-координаты. Игрокам предстоит заново учиться читать карту, ориентироваться по ландшафту и использовать специальные инструменты навигации.</p>
-                </div>
-                <div class="card">
-                    <h3>📜 Атмосфера Первого Сезона</h3>
-                    <p>Мы только начинаем писать историю Solara. Все постройки, города, инфраструктура и торгово-экономические связи будут создаваться участниками с нуля.</p>
-                </div>
-                <div class="card">
-                    <h3>🌊 Тайна Мертвого Океана</h3>
-                    <p>Остров заблокирован природной аномалией. Можно попытаться уплыть вдаль на лодке, но сработает ли это и чем закончится попытка — узнаете только в игре.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. КАК ПОПАСТЬ -->
-        <section id="page-apply" class="page">
-            <h1 class="page-title">Как попасть на Solara</h1>
-            <p class="page-subtitle">Строгий отбор гарантирует отсутствие гриферства и высокий уровень адекватности.</p>
-
-            <div class="grid">
-                <div class="card">
-                    <h3>1. Запуск бота</h3>
-                    <p>Перейдите в наш официальный Telegram-бот и запустите диалог командой <code>/start</code>.</p>
-                </div>
-                <div class="card">
-                    <h3>2. Заполнение анкеты</h3>
-                    <p>Ответьте на вопросы хранителя вестей (никнейм, возраст, микрофон, ответы на кейсы, медиа и планы на сезон).</p>
-                </div>
-                <div class="card">
-                    <h3>3. Одобрение Совета</h3>
-                    <p>Администрация изучит заявку. Отслеживать статус в режиме реального времени можно командой <code>/status</code>.</p>
-                </div>
-            </div>
-
-            <div style="text-align: center; margin-top: 40px;">
-                <a href="https://t.me/solara_smp_bot" target="_blank" class="btn btn-primary">🤖 Открыть @solara_smp_bot</a>
-            </div>
-        </section>
-
-        <!-- 4. МЕДИА И YOUTUBE -->
-        <section id="page-media" class="page">
-            <h1 class="page-title">Медиа & Контент-мейкеры</h1>
-            <p class="page-subtitle">Следите за развитием сезона на официальном канале сервера!</p>
-
-            <div class="card" style="margin-bottom: 25px;">
-                <h3>🔴 Официальный YouTube-канал Solara SMP</h3>
-                <p>Главный медиа-хаб проекта. Здесь будут выходить официальные трейлеры сезонов, масштабные ивенты, кинематики и истории нашего острова.</p>
-                <a href="https://www.youtube.com/@solara_smp" target="_blank" class="btn btn-primary" style="margin-top: 15px;">▶ Перейти на канал @solara_smp</a>
-            </div>
-
-            <div class="grid">
-                <div class="card">
-                    <h3>🎬 Каналы участников</h3>
-                    <p>Список каналов и стримов наших игроков появится здесь сразу после завершения набора и старта Первого Сезона.</p>
-                    <span class="badge">Формируется по результатам набора</span>
-                </div>
-                <div class="card">
-                    <h3>🎥 Для авторов контента</h3>
-                    <p>Планируешь снимать ролики или проводить стримы по Solara? Укажи это при подаче заявки в боте — мы поддержим твои видео на ресурсах проекта!</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 5. ТЕХНИЧЕСКАЯ ЧАСТЬ -->
-        <section id="page-tech" class="page">
-            <h1 class="page-title">Техническая часть</h1>
-            <p class="page-subtitle">Информация о сервере и используемых технологиях.</p>
-
-            <div class="grid">
-                <div class="card">
-                    <h3>🖥️ Серверная платформа</h3>
-                    <p>Сервер работает на ядрах Fabric с максимальной оптимизацией прогрузки чанков и тиков для комфортной игры без лагов.</p>
-                </div>
-                <div class="card">
-                    <h3>📦 Клиентский модпак / Сборка</h3>
-                    <p>Официальный клиентский модпак с уникальными модификациями будет полностью опубликован в открытый доступ <b>только в конце Первого Сезона</b>.</p>
-                    <span class="badge">Релиз по завершению сезона</span>
-                </div>
-                <div class="card">
-                    <h3>⚙️ Игровые правила</h3>
-                    <p>На сервере оптимизированы параметры спавна сущностей, отключен урон от огня по постройкам и установлены кастомные механики мира.</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>© 2026 Solara SMP. Все права защищены.</p>
-    </footer>
-
-    <script>
-        function switchPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            document.querySelectorAll('.nav-link').forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            document.getElementById('page-' + pageId).classList.add('active');
-
-            const activeBtn = Array.from(document.querySelectorAll('.nav-link')).find(btn => 
-                btn.getAttribute('onclick').includes(pageId)
-            );
-            if(activeBtn) activeBtn.classList.add('active');
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    </script>
-</body>
-</html>
+document.querySelectorAll("#mainNav button").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+function showPage(id){if(id==="admin"&&(!currentUser||currentUser.id!==ADMIN_UID)){openModal("loginModal");return;}document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+id));document.querySelectorAll("#mainNav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));window.scrollTo({top:0,behavior:"smooth"});}
+function esc(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function safeUrl(s){try{const u=new URL(s);return ["http:","https:"].includes(u.protocol)?u.href:"#"}catch{return "#"}}
+function closeModal(id){document.getElementById(id).classList.remove("show")}
+function openModal(id){document.getElementById(id).classList.add("show")}
+function setAdminUI(){const yes=!!currentUser&&currentUser.id===ADMIN_UID;document.getElementById("adminNav").classList.toggle("hidden",!yes);document.getElementById("adminPanel").classList.toggle("show",yes);document.getElementById("adminStatus").textContent=yes?"Вы вошли как администратор":"";if(yes)renderAdminRecords();}
+document.getElementById("adminOpen").onclick=()=>{if(currentUser&&currentUser.id===ADMIN_UID){showPage("admin");}else openModal("loginModal");};
+document.getElementById("loginForm").onsubmit=async e=>{e.preventDefault();if(!db)return;const {data,error}=await db.auth.signInWithPassword({email:loginEmail.value,password:loginPassword.value});if(error){loginError.textContent=error.message;return;}currentUser=data.user;if(currentUser.id!==ADMIN_UID){await db.auth.signOut();currentUser=null;loginError.textContent="У этого аккаунта нет прав администратора.";return;}closeModal("loginModal");setAdminUI();};
+document.getElementById("logoutBtn").onclick=async()=>{if(db)await db.auth.signOut();currentUser=null;setAdminUI();showPage("home");};
+if(db){db.auth.getSession().then(({data})=>{currentUser=data.session?.user||null;setAdminUI();});db.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;setAdminUI();});}
+function renderLore(items){const html=items.map(x=>`<article class="event"><time>${esc(x.event_date||"Дата не указана")}</time><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p></article>`).join("");loreList.innerHTML=html;homeLore.innerHTML=items.slice(0,3).map(x=>`<article class="news-item"><time>${esc(x.event_date||"ХРОНИКА")}</time><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p></article>`).join("");loreEmpty.classList.toggle("hidden",items.length>0);}
+function renderNews(items){const html=items.map(x=>`<article class="news-item"><time>${esc(x.event_date||"НОВОСТЬ")}</time><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p></article>`).join("");newsList.innerHTML=html;homeNews.innerHTML=items.slice(0,3).map(x=>`<article class="news-item"><time>${esc(x.event_date||"НОВОСТЬ")}</time><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p></article>`).join("");newsEmpty.classList.toggle("hidden",items.length>0);}
+function renderCreators(items){creatorList.innerHTML=items.map(x=>`<article class="tile creator"><div class="creator-cover">🎥</div><div class="creator-info">${x.featured?'<span class="role">★ ГЛАВНЫЙ ЮТУБЕР СЕЗОНА</span>':`<span class="role">${esc(x.role||"Участник сезона")}</span>`}<h3>${esc(x.name)}</h3><p>${esc(x.description||"Участник Solara SMP.")}</p>${x.url?`<div class="actions"><a class="btn" href="${esc(safeUrl(x.url))}" target="_blank" rel="noopener">▶ Канал</a></div>`:""}</div></article>`).join("");creatorEmpty.classList.toggle("hidden",items.length>0);}
+async function loadData(){if(!db){renderLore([]);renderNews([]);renderCreators([{id:"placeholder",name:"Имя главного ютубера",role:"Главный ютубер первого сезона",description:"Главный автор первого сезона Solara SMP. Имя, описание и ссылку на канал можно указать через админ-панель.",featured:true}]);return;}
+const [l,n,c]=await Promise.all([db.from("lore_entries").select("*").order("created_at",{ascending:false}),db.from("site_news").select("*").order("created_at",{ascending:false}),db.from("creators").select("*").order("created_at",{ascending:false})]);
+if(l.error||n.error||c.error){console.error(l.error,n.error,c.error);return;}
+cached={lore:l.data||[],news:n.data||[],creators:c.data||[]};renderLore(cached.lore);renderNews(cached.news);renderCreators(cached.creators);}
+function openEditor(type){editType.value=type;editTitle.textContent=type==="lore"?"НОВОЕ СОБЫТИЕ ЛОРА":type==="news"?"НОВАЯ НОВОСТЬ":"НОВЫЙ УЧАСТНИК";descField.classList.toggle("hidden",false);dateField.classList.toggle("hidden",type==="creator");urlField.classList.toggle("hidden",type!=="creator");roleField.classList.toggle("hidden",type!=="creator");featuredField.classList.toggle("hidden",type!=="creator");editName.value="";editDesc.value="";editDate.value="";editUrl.value="";editRole.value="Участник сезона";editFeatured.checked=false;editError.textContent="";openModal("editModal");}
+document.getElementById("editForm").onsubmit=async e=>{e.preventDefault();if(!db||!currentUser||currentUser.id!==ADMIN_UID)return;const type=editType.value;let table,payload={title:editName.value.trim(),body:editDesc.value.trim(),event_date:editDate.value.trim()||null};if(type==="lore")table="lore_entries";else if(type==="news")table="site_news";else{table="creators";payload={name:editName.value.trim(),description:editDesc.value.trim(),url:editUrl.value.trim()||null,role:editRole.value.trim(),featured:editFeatured.checked};}
+const {error}=await db.from(table).insert(payload);if(error){editError.textContent=error.message;return;}closeModal("editModal");await loadData();renderAdminRecords();};
+async function deleteRecord(table,id){if(!confirm("Точно удалить эту запись?"))return;const {error}=await db.from(table).delete().eq("id",id);if(error)alert(error.message);else{await loadData();renderAdminRecords();}}
+function renderAdminRecords(){if(!currentUser||currentUser.id!==ADMIN_UID)return;const groups=[["События лора","lore_entries",cached.lore],["Новости","site_news",cached.news],["Участники","creators",cached.creators]];adminRecords.innerHTML=groups.map(([title,table,items])=>`<div class="panel"><h3>${title}</h3>${items.length?items.map(x=>`<div style="display:flex;justify-content:space-between;gap:12px;align-items:center;border-top:1px solid #ffffff12;padding:10px 0"><span class="small">${esc(x.title||x.name)}</span><button class="btn danger" onclick="deleteRecord('${table}','${esc(x.id)}')">Удалить</button></div>`).join(""):'<p class="small">Пока пусто.</p>'}</div>`).join("");}
+loadData();
+</script>
+</body></html>
