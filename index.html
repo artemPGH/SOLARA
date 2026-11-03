@@ -75,10 +75,10 @@ footer{border-top:1px solid var(--line);padding:26px;text-align:center;color:#8f
 
 <script>
 // Вставь URL проекта Supabase и anon/public key из Settings → API.
-const SUPABASE_URL = "ВСТАВЬ_SUPABASE_PROJECT_URL";
-const SUPABASE_ANON_KEY = "ВСТАВЬ_SUPABASE_ANON_KEY";
+const SUPABASE_URL = "https://qcpbbmuowngtcuhuormf.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_uuBJa_FHk_dGIMhrWI22iQ_AGsaW15r";
 // UUID администратора из Authentication → Users. Не является секретом.
-const ADMIN_UID = "ВСТАВЬ_UUID_АДМИНИСТРАТОРА";
+const ADMIN_UID = "8e573058-0496-4518-a5c7-f7880e23c844";
 const configured = SUPABASE_URL.startsWith("https://") && !SUPABASE_URL.includes("ВСТАВЬ_") && SUPABASE_ANON_KEY.length > 20 && !ADMIN_UID.includes("ВСТАВЬ_");
 let db = null, currentUser = null, cached = {lore:[],news:[],creators:[]};
 
