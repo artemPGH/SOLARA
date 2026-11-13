@@ -74,42 +74,436 @@ footer{border-top:1px solid var(--line);padding:26px;text-align:center;color:#8f
 <div class="modal" id="editModal"><div class="modal-box"><h2 id="editTitle">НОВАЯ ЗАПИСЬ</h2><form id="editForm"><input type="hidden" id="editType"><div class="field"><label>Заголовок / имя</label><input id="editName" maxlength="120" required></div><div class="field" id="descField"><label>Описание / текст</label><textarea id="editDesc" maxlength="5000" required></textarea></div><div class="field" id="dateField"><label>Дата (например, 1 ноября 2026)</label><input id="editDate" maxlength="60"></div><div class="field" id="urlField"><label>Ссылка (YouTube / источник)</label><input id="editUrl" type="url" placeholder="https://..."></div><div class="field" id="roleField"><label>Роль участника</label><input id="editRole" value="Участник сезона"></div><div class="field" id="featuredField"><label><input type="checkbox" id="editFeatured" style="width:auto"> Главный ютубер сезона</label></div><button class="btn primary" type="submit">Сохранить</button> <button class="btn" type="button" onclick="closeModal('editModal')">Отмена</button><p id="editError" class="small"></p></form></div></div>
 
 <script>
-// Вставь URL проекта Supabase и anon/public key из Settings → API.
 const SUPABASE_URL = "https://qcpbbmuowngtcuhuormf.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_uuBJa_FHk_dGIMhrWI22iQ_AGsaW15r";
-// UUID администратора из Authentication → Users. Не является секретом.
+
 const ADMIN_UIDS = [
     "8e573058-0496-4518-a5c7-f7880e23c844",
     "d302a97f-1307-492d-9ec8-e1b20e84bea8"
 ];
-const configured = SUPABASE_URL.startsWith("https://") && !SUPABASE_URL.includes("ВСТАВЬ_") && SUPABASE_ANON_KEY.length > 20 && !ADMIN_UID.includes("ВСТАВЬ_");
-let db = null, currentUser = null, cached = {lore:[],news:[],creators:[]};
 
-if(configured && window.supabase) db = window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+let db = null;
+let currentUser = null;
+let cached = {
+    lore: [],
+    news: [],
+    creators: []
+};
 
-document.querySelectorAll("#mainNav button").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
-function showPage(id){if(id==="admin"&&(!currentUser||currentUser.id!==ADMIN_UID)){openModal("loginModal");return;}document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+id));document.querySelectorAll("#mainNav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));window.scrollTo({top:0,behavior:"smooth"});}
-function esc(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function safeUrl(s){try{const u=new URL(s);return ["http:","https:"].includes(u.protocol)?u.href:"#"}catch{return "#"}}
-function closeModal(id){document.getElementById(id).classList.remove("show")}
-function openModal(id){document.getElementById(id).classList.add("show")}
-function setAdminUI(){const yes=!!currentUser&&currentUser.id===ADMIN_UID;document.getElementById("adminNav").classList.toggle("hidden",!yes);document.getElementById("adminPanel").classList.toggle("show",yes);document.getElementById("adminStatus").textContent=yes?"Вы вошли как администратор":"";if(yes)renderAdminRecords();}
-document.getElementById("adminOpen").onclick=()=>{if(currentUser&&currentUser.id===ADMIN_UID){showPage("admin");}else openModal("loginModal");};
-document.getElementById("loginForm").onsubmit=async e=>{e.preventDefault();if(!db)return;const {data,error}=await db.auth.signInWithPassword({email:loginEmail.value,password:loginPassword.value});if(error){loginError.textContent=error.message;return;}currentUser=data.user;if(currentUser.id!==ADMIN_UID){await db.auth.signOut();currentUser=null;loginError.textContent="У этого аккаунта нет прав администратора.";return;}closeModal("loginModal");setAdminUI();};
-document.getElementById("logoutBtn").onclick=async()=>{if(db)await db.auth.signOut();currentUser=null;setAdminUI();showPage("home");};
-if(db){db.auth.getSession().then(({data})=>{currentUser=data.session?.user||null;setAdminUI();});db.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;setAdminUI();});}
-function renderLore(items){const html=items.map(x=>`<article class="event"><time>${esc(x.event_date||"Дата не указана")}</time><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p></article>`).join("");loreList.innerHTML=html;homeLore.innerHTML=items.slice(0,3).map(x=>`<article class="news-item"><time>${esc(x.event_date||"ХРОНИКА")}</time><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p></article>`).join("");loreEmpty.classList.toggle("hidden",items.length>0);}
-function renderNews(items){const html=items.map(x=>`<article class="news-item"><time>${esc(x.event_date||"НОВОСТЬ")}</time><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p></article>`).join("");newsList.innerHTML=html;homeNews.innerHTML=items.slice(0,3).map(x=>`<article class="news-item"><time>${esc(x.event_date||"НОВОСТЬ")}</time><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p></article>`).join("");newsEmpty.classList.toggle("hidden",items.length>0);}
-function renderCreators(items){creatorList.innerHTML=items.map(x=>`<article class="tile creator"><div class="creator-cover">🎥</div><div class="creator-info">${x.featured?'<span class="role">★ ГЛАВНЫЙ ЮТУБЕР СЕЗОНА</span>':`<span class="role">${esc(x.role||"Участник сезона")}</span>`}<h3>${esc(x.name)}</h3><p>${esc(x.description||"Участник Solara SMP.")}</p>${x.url?`<div class="actions"><a class="btn" href="${esc(safeUrl(x.url))}" target="_blank" rel="noopener">▶ Канал</a></div>`:""}</div></article>`).join("");creatorEmpty.classList.toggle("hidden",items.length>0);}
-async function loadData(){if(!db){renderLore([]);renderNews([]);renderCreators([{id:"placeholder",name:"Имя главного ютубера",role:"Главный ютубер первого сезона",description:"Главный автор первого сезона Solara SMP. Имя, описание и ссылку на канал можно указать через админ-панель.",featured:true}]);return;}
-const [l,n,c]=await Promise.all([db.from("lore_entries").select("*").order("created_at",{ascending:false}),db.from("site_news").select("*").order("created_at",{ascending:false}),db.from("creators").select("*").order("created_at",{ascending:false})]);
-if(l.error||n.error||c.error){console.error(l.error,n.error,c.error);return;}
-cached={lore:l.data||[],news:n.data||[],creators:c.data||[]};renderLore(cached.lore);renderNews(cached.news);renderCreators(cached.creators);}
-function openEditor(type){editType.value=type;editTitle.textContent=type==="lore"?"НОВОЕ СОБЫТИЕ ЛОРА":type==="news"?"НОВАЯ НОВОСТЬ":"НОВЫЙ УЧАСТНИК";descField.classList.toggle("hidden",false);dateField.classList.toggle("hidden",type==="creator");urlField.classList.toggle("hidden",type!=="creator");roleField.classList.toggle("hidden",type!=="creator");featuredField.classList.toggle("hidden",type!=="creator");editName.value="";editDesc.value="";editDate.value="";editUrl.value="";editRole.value="Участник сезона";editFeatured.checked=false;editError.textContent="";openModal("editModal");}
-document.getElementById("editForm").onsubmit=async e=>{e.preventDefault();if(!db||!currentUser||currentUser.id!==ADMIN_UID)return;const type=editType.value;let table,payload={title:editName.value.trim(),body:editDesc.value.trim(),event_date:editDate.value.trim()||null};if(type==="lore")table="lore_entries";else if(type==="news")table="site_news";else{table="creators";payload={name:editName.value.trim(),description:editDesc.value.trim(),url:editUrl.value.trim()||null,role:editRole.value.trim(),featured:editFeatured.checked};}
-const {error}=await db.from(table).insert(payload);if(error){editError.textContent=error.message;return;}closeModal("editModal");await loadData();renderAdminRecords();};
-async function deleteRecord(table,id){if(!confirm("Точно удалить эту запись?"))return;const {error}=await db.from(table).delete().eq("id",id);if(error)alert(error.message);else{await loadData();renderAdminRecords();}}
-function renderAdminRecords(){if(!currentUser||currentUser.id!==ADMIN_UID)return;const groups=[["События лора","lore_entries",cached.lore],["Новости","site_news",cached.news],["Участники","creators",cached.creators]];adminRecords.innerHTML=groups.map(([title,table,items])=>`<div class="panel"><h3>${title}</h3>${items.length?items.map(x=>`<div style="display:flex;justify-content:space-between;gap:12px;align-items:center;border-top:1px solid #ffffff12;padding:10px 0"><span class="small">${esc(x.title||x.name)}</span><button class="btn danger" onclick="deleteRecord('${table}','${esc(x.id)}')">Удалить</button></div>`).join(""):'<p class="small">Пока пусто.</p>'}</div>`).join("");}
+const configured =
+    SUPABASE_URL.startsWith("https://") &&
+    SUPABASE_ANON_KEY.length > 20;
+
+if (configured && window.supabase) {
+    db = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+}
+
+const $ = id => document.getElementById(id);
+
+function isAdmin() {
+    return !!currentUser && ADMIN_UIDS.includes(currentUser.id);
+}
+
+document.querySelectorAll("#mainNav button").forEach(button => {
+    button.addEventListener("click", () => showPage(button.dataset.page));
+});
+
+function showPage(id) {
+    if (id === "admin" && !isAdmin()) {
+        openModal("loginModal");
+        return;
+    }
+
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.toggle("active", page.id === "page-" + id);
+    });
+
+    document.querySelectorAll("#mainNav button").forEach(button => {
+        button.classList.toggle("active", button.dataset.page === id);
+    });
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function esc(value = "") {
+    return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    }[char]));
+}
+
+function safeUrl(value) {
+    try {
+        const url = new URL(value);
+        return ["http:", "https:"].includes(url.protocol)
+            ? url.href
+            : "#";
+    } catch {
+        return "#";
+    }
+}
+
+function openModal(id) {
+    $(id).classList.add("show");
+}
+
+function closeModal(id) {
+    $(id).classList.remove("show");
+}
+
+function setAdminUI() {
+    const yes = isAdmin();
+
+    $("adminNav").classList.toggle("hidden", !yes);
+    $("adminPanel").classList.toggle("show", yes);
+
+    $("adminStatus").textContent = yes
+        ? "Вы вошли как администратор"
+        : "";
+
+    if (yes) {
+        renderAdminRecords();
+    }
+}
+
+$("adminOpen").onclick = () => {
+    if (isAdmin()) {
+        showPage("admin");
+    } else {
+        openModal("loginModal");
+    }
+};
+
+$("loginForm").onsubmit = async event => {
+    event.preventDefault();
+
+    if (!db) {
+        $("loginError").textContent = "Supabase не подключён.";
+        return;
+    }
+
+    $("loginError").textContent = "Выполняется вход...";
+
+    const { data, error } = await db.auth.signInWithPassword({
+        email: $("loginEmail").value.trim(),
+        password: $("loginPassword").value
+    });
+
+    if (error) {
+        $("loginError").textContent = error.message;
+        return;
+    }
+
+    currentUser = data.user;
+
+    if (!isAdmin()) {
+        await db.auth.signOut();
+        currentUser = null;
+
+        $("loginError").textContent =
+            "У этого аккаунта нет прав администратора.";
+
+        return;
+    }
+
+    closeModal("loginModal");
+    $("loginForm").reset();
+
+    setAdminUI();
+    showPage("admin");
+};
+
+$("logoutBtn").onclick = async () => {
+    if (db) {
+        await db.auth.signOut();
+    }
+
+    currentUser = null;
+    setAdminUI();
+    showPage("home");
+};
+
+if (db) {
+    db.auth.getSession().then(({ data }) => {
+        currentUser = data.session?.user || null;
+        setAdminUI();
+    });
+
+    db.auth.onAuthStateChange((_event, session) => {
+        currentUser = session?.user || null;
+        setAdminUI();
+    });
+}
+
+function renderLore(items) {
+    $("loreList").innerHTML = items.map(item => `
+        <article class="event">
+            <time>${esc(item.event_date || "Дата не указана")}</time>
+            <h3>${esc(item.title)}</h3>
+            <p>${esc(item.body)}</p>
+        </article>
+    `).join("");
+
+    $("homeLore").innerHTML = items.slice(0, 3).map(item => `
+        <article class="news-item">
+            <time>${esc(item.event_date || "ХРОНИКА")}</time>
+            <h3>${esc(item.title)}</h3>
+            <p>${esc(item.body)}</p>
+        </article>
+    `).join("");
+
+    $("loreEmpty").classList.toggle("hidden", items.length > 0);
+}
+
+function renderNews(items) {
+    $("newsList").innerHTML = items.map(item => `
+        <article class="news-item">
+            <time>${esc(item.event_date || "НОВОСТЬ")}</time>
+            <h3>${esc(item.title)}</h3>
+            <p>${esc(item.body)}</p>
+        </article>
+    `).join("");
+
+    $("homeNews").innerHTML = items.slice(0, 3).map(item => `
+        <article class="news-item">
+            <time>${esc(item.event_date || "НОВОСТЬ")}</time>
+            <h3>${esc(item.title)}</h3>
+            <p>${esc(item.body)}</p>
+        </article>
+    `).join("");
+
+    $("newsEmpty").classList.toggle("hidden", items.length > 0);
+}
+
+function renderCreators(items) {
+    $("creatorList").innerHTML = items.map(item => `
+        <article class="tile creator">
+            <div class="creator-cover">🎥</div>
+            <div class="creator-info">
+                ${item.featured
+                    ? '<span class="role">★ ГЛАВНЫЙ ЮТУБЕР СЕЗОНА</span>'
+                    : `<span class="role">${esc(item.role || "Участник сезона")}</span>`
+                }
+                <h3>${esc(item.name)}</h3>
+                <p>${esc(item.description || "Участник Solara SMP.")}</p>
+                ${item.url ? `
+                    <div class="actions">
+                        <a class="btn" href="${esc(safeUrl(item.url))}"
+                           target="_blank" rel="noopener">▶ Канал</a>
+                    </div>
+                ` : ""}
+            </div>
+        </article>
+    `).join("");
+
+    $("creatorEmpty").classList.toggle("hidden", items.length > 0);
+}
+
+async function loadData() {
+    if (!db) {
+        console.error("Supabase не подключён.");
+        return;
+    }
+
+    const [lore, news, creators] = await Promise.all([
+        db.from("lore_entries").select("*")
+            .order("created_at", { ascending: false }),
+
+        db.from("site_news").select("*")
+            .order("created_at", { ascending: false }),
+
+        db.from("creators").select("*")
+            .order("created_at", { ascending: false })
+    ]);
+
+    if (lore.error || news.error || creators.error) {
+        console.error("Ошибки загрузки:", {
+            lore: lore.error,
+            news: news.error,
+            creators: creators.error
+        });
+
+        if (lore.error) {
+            $("loreList").innerHTML =
+                `<div class="empty">${esc(lore.error.message)}</div>`;
+        }
+
+        if (news.error) {
+            $("newsList").innerHTML =
+                `<div class="empty">${esc(news.error.message)}</div>`;
+        }
+
+        if (creators.error) {
+            $("creatorList").innerHTML =
+                `<div class="empty">${esc(creators.error.message)}</div>`;
+        }
+
+        return;
+    }
+
+    cached = {
+        lore: lore.data || [],
+        news: news.data || [],
+        creators: creators.data || []
+    };
+
+    renderLore(cached.lore);
+    renderNews(cached.news);
+    renderCreators(cached.creators);
+
+    if (isAdmin()) {
+        renderAdminRecords();
+    }
+}
+
+function openEditor(type) {
+    if (!isAdmin()) return;
+
+    $("editType").value = type;
+
+    $("editTitle").textContent =
+        type === "lore" ? "НОВОЕ СОБЫТИЕ ЛОРА" :
+        type === "news" ? "НОВАЯ НОВОСТЬ" :
+        "НОВЫЙ УЧАСТНИК";
+
+    $("dateField").classList.toggle("hidden", type === "creator");
+    $("urlField").classList.toggle("hidden", type !== "creator");
+    $("roleField").classList.toggle("hidden", type !== "creator");
+    $("featuredField").classList.toggle("hidden", type !== "creator");
+
+    $("editName").value = "";
+    $("editDesc").value = "";
+    $("editDate").value = "";
+    $("editUrl").value = "";
+    $("editRole").value = "Участник сезона";
+    $("editFeatured").checked = false;
+    $("editError").textContent = "";
+
+    openModal("editModal");
+}
+
+$("editForm").onsubmit = async event => {
+    event.preventDefault();
+
+    if (!db || !isAdmin()) {
+        $("editError").textContent = "Нет прав администратора.";
+        return;
+    }
+
+    const type = $("editType").value;
+    const name = $("editName").value.trim();
+    const description = $("editDesc").value.trim();
+
+    let table;
+    let payload;
+
+    if (type === "lore") {
+        table = "lore_entries";
+
+        payload = {
+            title: name,
+            body: description,
+            event_date: $("editDate").value.trim() || null
+        };
+    } else if (type === "news") {
+        table = "site_news";
+
+        payload = {
+            title: name,
+            body: description,
+            event_date: $("editDate").value.trim() || null
+        };
+    } else {
+        table = "creators";
+
+        payload = {
+            name: name,
+            description: description,
+            url: $("editUrl").value.trim() || null,
+            role: $("editRole").value.trim(),
+            featured: $("editFeatured").checked
+        };
+    }
+
+    $("editError").textContent = "Сохранение...";
+
+    const { error } = await db.from(table).insert(payload);
+
+    if (error) {
+        $("editError").textContent = error.message;
+        console.error(error);
+        return;
+    }
+
+    closeModal("editModal");
+
+    await loadData();
+    renderAdminRecords();
+};
+
+async function deleteRecord(table, id) {
+    if (!db || !isAdmin()) {
+        alert("Нет прав администратора.");
+        return;
+    }
+
+    if (!confirm("Точно удалить эту запись?")) return;
+
+    const { error } = await db
+        .from(table)
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+        alert(error.message);
+        console.error(error);
+        return;
+    }
+
+    await loadData();
+    renderAdminRecords();
+}
+
+function renderAdminRecords() {
+    if (!isAdmin()) return;
+
+    const groups = [
+        ["События лора", "lore_entries", cached.lore],
+        ["Новости", "site_news", cached.news],
+        ["Участники", "creators", cached.creators]
+    ];
+
+    $("adminRecords").innerHTML = groups.map(([title, table, items]) => `
+        <div class="panel">
+            <h3>${title}</h3>
+
+            ${items.length ? items.map(item => `
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    gap:12px;
+                    align-items:center;
+                    border-top:1px solid #ffffff12;
+                    padding:10px 0;
+                ">
+                    <span class="small">${esc(item.title || item.name)}</span>
+
+                    <button class="btn danger"
+                        onclick="deleteRecord('${table}','${esc(item.id)}')">
+                        Удалить
+                    </button>
+                </div>
+            `).join("") : '<p class="small">Пока пусто.</p>'}
+        </div>
+    `).join("");
+}
+
 loadData();
 </script>
 </body></html>
